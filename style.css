@@ -4,3 +4,24 @@
     height: 0px;
     border: 1px solid rgba(17, 17, 17, 0.2);
 }
+
+#details-left {
+    background: rgba(235, 87, 87, 0.05);
+    border: 1px solid #EB5757;
+    border-radius: 16px;
+}
+
+#details-right {
+    background: #FFFFFF;
+    border: 1px solid #E7E7E7;
+    border-radius: 16px;
+}
+
+#custom-orange-text {
+    color: #F28927;
+    ;
+}
+
+.no-bullet {
+    list-style-type: none;
+}
