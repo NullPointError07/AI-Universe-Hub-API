@@ -1,19 +1,34 @@
+const spinnerIcon = document.getElementById("spinner");
 const seeMoreButton = document.getElementById("btn-seeMore");
 
 // fetching primary data from API
 const loadUniverse = async () => {
   const url = `https://openapi.programming-hero.com/api/ai/tools`;
+  showSpinner();
   const res = await fetch(url);
   const data = await res.json();
   displayAITools(data.data.tools);
+  hideSpinner();
 };
 
 // dynamic url to fetch detailed data
 const loadingDetails = async (id) => {
   const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
+  showSpinner();
   const res = await fetch(url);
   const data = await res.json();
   displayDetailedAI(data.data);
+  hideSpinner();
+};
+
+// Show spinner
+const showSpinner = () => {
+  spinnerIcon.classList.remove("d-none");
+};
+
+// Hide spinner
+const hideSpinner = () => {
+  spinnerIcon.classList.add("d-none");
 };
 
 const displayAITools = (allTwelveAI) => {
@@ -25,12 +40,14 @@ const displayAITools = (allTwelveAI) => {
     AIUniverseHub(AICard, AIContainer);
   });
 
+  seeMoreButton.classList.remove("d-none");
+
   seeMoreButton.addEventListener("click", () => {
     const lastSixAI = allTwelveAI.slice(-6);
     lastSixAI.forEach((AICard) => {
       AIUniverseHub(AICard, AIContainer);
     });
-    seeMoreButton.style.display = "none";
+    seeMoreButton.classList.add("d-none");
   });
 };
 
@@ -43,37 +60,40 @@ const displayDetailedAI = (AiDetails) => {
           <div class="card-body">
               <h4 class="card-text">${AiDetails.description}</h4>
               <div class="card-group text-center my-3">
-                  <div class="card">
+                  <div class="card me-3 rounded-2">
                       <div class="card-body">
-                          <p class="text-success">${
+                          <h6 class="text-success">${
                             AiDetails.pricing
                               ? AiDetails.pricing[0].price +
-                                " " +
+                                "<br>" +
                                 AiDetails.pricing[0].plan
                               : "Free of Cost/ Basic"
-                          }</p>
+                          }</h6>
                       </div>
                   </div>
-                  <div class="card">
+                  <div class="card me-3 rounded-2">
                       <div class="card-body">
-                          <p id="custom-orange-text" class="">${
+                          <h6 id="custom-orange-text" class="">${
                             AiDetails.pricing
                               ? AiDetails.pricing[1].price +
-                                " " +
+                                "<br>" +
                                 AiDetails.pricing[1].plan
                               : "Free of Cost/ Pro"
-                          }</p>
+                          }</h6>
                       </div>
                   </div>
-                  <div class="card">
+                  <div class="card rounded-2">
                       <div class="card-body">
-                          <p class="text-danger">${
+                          <h6 class="text-danger">${
                             AiDetails.pricing
-                              ? AiDetails.pricing[2].price +
-                                " " +
-                                AiDetails.pricing[2].plan
+                              ? AiDetails.pricing[2].price !==
+                                "Contact us for pricing"
+                                ? AiDetails.pricing[2].price +
+                                  "<br>" +
+                                  AiDetails.pricing[2].plan
+                                : `Contact Us <br>${AiDetails.pricing[2].plan}`
                               : "Free of Cost/ Enterprise"
-                          }</p>
+                          }</h6>
                       </div>
                   </div>
               </div>
@@ -125,9 +145,18 @@ const displayDetailedAI = (AiDetails) => {
           </div>
       </div>
       <div id="details-right" class="card">
-          <img src="${
-            AiDetails.image_link[0]
-          }" class="card-img-top img-fluid rounded p-3" alt="...">
+          <div>
+            <img src="${
+              AiDetails.image_link[0]
+            }" class="card-img-top img-fluid rounded p-3" alt="...">
+            <h6 class="${
+              AiDetails.accuracy.score === null
+                ? ""
+                : "position-absolute top-0 end-0 m-4 px-3 py-1 bg-danger text-white rounded"
+            }">${
+    AiDetails.accuracy ? AiDetails.accuracy.score * 100 + "% accuracy" : ""
+  }</h6>        
+          </div>
           <div class="card-body text-center">
               <h5 class="card-text">${
                 AiDetails.input_output_examples
@@ -166,9 +195,9 @@ const AIUniverseHub = (AICards, AIContainer) => {
                 <li>${
                   AICards.features ? AICards.features[1] : "No Feature Found"
                 }</li>
-                <li>${
-                  AICards.features ? AICards.features[2] : "No Feature Found"
-                }</li>
+                <li class="${AICards.features[2] ? "" : "no-bullet"}">
+                  ${AICards.features[2] ? AICards.features[2] : ""}
+                </li>
             </ol>
             <span class="span-border"></span>
             <div class="d-flex justify-content-between align-items-center">
