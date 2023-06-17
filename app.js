@@ -1,5 +1,7 @@
 const spinnerIcon = document.getElementById("spinner");
 const seeMoreButton = document.getElementById("btn-seeMore");
+const sortByDate = document.getElementById("btn-sort");
+const AIContainer = document.getElementById("AI-container");
 
 // fetching primary data from API
 const loadUniverse = async () => {
@@ -8,6 +10,7 @@ const loadUniverse = async () => {
   const res = await fetch(url);
   const data = await res.json();
   displayAITools(data.data.tools);
+  sorting(data.data.tools);
   hideSpinner();
 };
 
@@ -21,6 +24,21 @@ const loadingDetails = async (id) => {
   hideSpinner();
 };
 
+const sorting = (date) => {
+  sortByDate.addEventListener("click", () => {
+    seeMoreButton.classList.add("d-none");
+    showSpinner();
+    date.sort((a, b) => new Date(a.published_in) - new Date(b.published_in));
+
+    AIContainer.innerHTML = "";
+
+    date.forEach((AICard) => {
+      AIUniverseHub(AICard, AIContainer);
+    });
+    hideSpinner();
+  });
+};
+
 // Show spinner
 const showSpinner = () => {
   spinnerIcon.classList.remove("d-none");
@@ -32,7 +50,7 @@ const hideSpinner = () => {
 };
 
 const displayAITools = (allTwelveAI) => {
-  const AIContainer = document.getElementById("AI-container");
+  console.log(allTwelveAI);
   const firstSixAI = allTwelveAI.slice(0, 6);
   console.log(firstSixAI);
 
@@ -185,7 +203,9 @@ const AIUniverseHub = (AICards, AIContainer) => {
 
   firsOrLastSixDiv.innerHTML = `
     <div class="card">
-        <img src="${AICards.image}" class="img-fluid rounded p-3" alt="...">
+        <img src="${
+          AICards.image
+        }" class="img-fluid rounded p-3 image-h-w" alt="...">
         <div class="card-body">
             <h4 class="card-title">Features</h4>
             <ol>

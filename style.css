@@ -5,6 +5,11 @@
     border: 1px solid rgba(17, 17, 17, 0.2);
 }
 
+.image-h-w {
+    width: 430px;
+    height: 260px;
+}
+
 #details-left {
     background: rgba(235, 87, 87, 0.05);
     border: 1px solid #EB5757;
